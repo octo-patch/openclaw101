@@ -147,16 +147,20 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 - 有 Claude 订阅的选 **setup-token 接入**（不需要 API Key，不产生额外费用）
 - 没有订阅的选 **Anthropic API Key**（按量付费）
 
-> 💡 **支持的模型**：除了 Anthropic Claude Opus 4.5（推荐），还支持 OpenAI GPT-5.2、Google Gemini 3 Pro、Moonshot（Kimi K2.5）、MiniMax M3 和 M2.7、Z.AI（GLM-4.7）、xAI（Grok）、Qwen、Venice、OpenRouter 等 10+ 家模型。但 Claude 是第一选择。有 Claude 订阅的同学用 setup-token 接入最方便（不需要 API Key，不产生额外费用）。
+> 💡 **支持的模型**：除了 Anthropic Claude Opus 4.5（推荐），还支持 OpenAI GPT-5.2、Google Gemini 3 Pro、Moonshot（Kimi K2.5）、MiniMax M3.1 Flash 和 M3、Z.AI（GLM-4.7）、xAI（Grok）、Qwen、Venice、OpenRouter 等 10+ 家模型。但 Claude 是第一选择。有 Claude 订阅的同学用 setup-token 接入最方便（不需要 API Key，不产生额外费用）。
 
 ### MiniMax 当前配置参考
 
-接入 MiniMax 时，根据所需能力选择对应的模型 ID：
+新接入 MiniMax 直连 API 时，优先选择 `MiniMax-M3.1-Flash`，也可选择 `MiniMax-M3`。请确认已安装的 OpenClaw 版本支持所选模型；已有或自定义模型 ID 保持不变，按需自行迁移。
 
-| 模型 ID | 上下文 | 输入 | Thinking | 每 100 万 Token 价格（美元） |
+| 模型 ID | 上下文 | 输入 | Thinking | 每 100 万 Token 标准价格（美元） |
 | --- | ---: | --- | --- | --- |
-| `MiniMax-M3` | 1,000,000 Token | 文本、图片、视频 | 自适应或关闭 | 输入 $0.60，输出 $2.40，缓存读取 $0.12 |
-| `MiniMax-M2.7` | 204,800 Token | 文本 | 始终开启 | 输入 $0.30，输出 $1.20，缓存读取 $0.06，缓存写入 $0.375 |
+| `MiniMax-M3.1-Flash` | 1,000,000 Token | 文本、图片、视频 | 仅自适应 | 输入 $0.15，输出 $0.60，缓存读取 $0.015 |
+| `MiniMax-M3` | 1,000,000 Token | 文本、图片、视频 | 自适应或关闭 | 输入不超过 512k Token：输入 $0.30，输出 $1.20，缓存读取 $0.06；超过 512k：输入 $0.60，输出 $2.40，缓存读取 $0.12 |
+
+Flash 最多输出 524,288 Token（包含思考 Token）。支持 `low`、`medium`、`high`、`xhigh`、`max`（默认）思考深度，通过 Chat Completions 的 `reasoning_effort` 或 Anthropic 兼容 API 的 `output_config.effort` 设置。Flash 不支持关闭思考、`none` 深度、`service_tier` 或 `reasoning_split: false`。M3 在 Chat Completions 中默认开启思考，在 Anthropic 兼容 API 中默认关闭；effort 不会调整 M3 的思考深度。多轮对话应完整保留助手的思考内容和工具调用历史。
+
+以上为直连 API 参数及美元价格，不代表网关或订阅权益。请参阅最新的[模型列表](https://platform.minimax.io/docs/guides/models-intro)、[价格](https://platform.minimax.io/docs/pricing/overview#models/text)、[Chat Completions](https://platform.minimax.io/docs/api-reference/text-openai-api) 和 [Anthropic 兼容 API](https://platform.minimax.io/docs/api-reference/text-anthropic-api) 文档；各地区模型可用性和套餐覆盖范围需单独确认。
 
 全球英文部署可使用 OpenAI 兼容端点 `https://api.minimax.io/v1` 或 Anthropic 兼容端点 `https://api.minimax.io/anthropic`；中国大陆部署使用 `https://api.minimaxi.com/v1` 或 `https://api.minimaxi.com/anthropic`。具体接入方式请参考 [全球 MiniMax 文档](https://platform.minimax.io/docs) 或 [中国 MiniMax 文档](https://platform.minimaxi.com/docs)。
 

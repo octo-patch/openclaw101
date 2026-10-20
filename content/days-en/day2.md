@@ -147,16 +147,20 @@ The wizard will guide you through all configuration step by step, just follow th
 - If you have a Claude subscription, choose **setup-token connection** (no API Key needed, no extra charges)
 - If no subscription, choose **Anthropic API Key** (pay as you go)
 
-> 💡 **Supported Models**: Besides Anthropic Claude Opus 4.5 (recommended), it also supports OpenAI GPT-5.2, Google Gemini 3 Pro, Moonshot (Kimi K2.5), MiniMax M3 and M2.7, Z.AI (GLM-4.7), xAI (Grok), Qwen, Venice, OpenRouter, and 10+ other providers. But Claude is the first choice. Those with Claude subscriptions should use setup-token connection for convenience (no API Key needed, no extra charges).
+> 💡 **Supported Models**: Besides Anthropic Claude Opus 4.5 (recommended), it also supports OpenAI GPT-5.2, Google Gemini 3 Pro, Moonshot (Kimi K2.5), MiniMax M3.1 Flash and M3, Z.AI (GLM-4.7), xAI (Grok), Qwen, Venice, OpenRouter, and 10+ other providers. But Claude is the first choice. Those with Claude subscriptions should use setup-token connection for convenience (no API Key needed, no extra charges).
 
 ### MiniMax Current Setup Reference
 
-For MiniMax setup, use the model ID that matches the capability you need:
+For a new MiniMax direct API setup, start with `MiniMax-M3.1-Flash`; `MiniMax-M3` is the alternative. Check that your installed OpenClaw version supports the selected model. Keep saved or custom model IDs unchanged unless you choose to migrate them.
 
-| Model ID | Context | Input | Thinking | Price per 1M tokens (USD) |
+| Model ID | Context | Input | Thinking | Standard price per 1M tokens (USD) |
 | --- | ---: | --- | --- | --- |
-| `MiniMax-M3` | 1,000,000 tokens | Text, image, video | Adaptive or disabled | $0.60 input, $2.40 output, $0.12 cache read |
-| `MiniMax-M2.7` | 204,800 tokens | Text | Always on | $0.30 input, $1.20 output, $0.06 cache read, $0.375 cache write |
+| `MiniMax-M3.1-Flash` | 1,000,000 tokens | Text, image, video | Adaptive only | $0.15 input, $0.60 output, $0.015 cache read |
+| `MiniMax-M3` | 1,000,000 tokens | Text, image, video | Adaptive or disabled | Up to 512k input tokens: $0.30 input, $1.20 output, $0.06 cache read; above 512k: $0.60 input, $2.40 output, $0.12 cache read |
+
+Flash allows up to 524,288 output tokens, including thinking tokens. It supports thinking effort `low`, `medium`, `high`, `xhigh`, or `max` (default), through `reasoning_effort` for Chat Completions or `output_config.effort` for the Anthropic-compatible API. Do not send disabled thinking, effort `none`, `service_tier`, or `reasoning_split: false` with Flash. M3 defaults to thinking on for Chat Completions and off for the Anthropic-compatible API; effort does not tune M3 thinking depth. Preserve complete assistant thinking and tool-call history between turns.
+
+These are direct API parameters and USD rates, not gateway or subscription guarantees. See the current [models](https://platform.minimax.io/docs/guides/models-intro), [pricing](https://platform.minimax.io/docs/pricing/overview#models/text), [Chat Completions](https://platform.minimax.io/docs/api-reference/text-openai-api), and [Anthropic-compatible API](https://platform.minimax.io/docs/api-reference/text-anthropic-api) references. Verify regional model availability and plan coverage separately.
 
 For global English deployments, the OpenAI-compatible endpoint is `https://api.minimax.io/v1` and the Anthropic-compatible endpoint is `https://api.minimax.io/anthropic`. For China deployments, use `https://api.minimaxi.com/v1` or `https://api.minimaxi.com/anthropic`. See the [global MiniMax documentation](https://platform.minimax.io/docs) or [China MiniMax documentation](https://platform.minimaxi.com/docs) for provider-specific setup details.
 
